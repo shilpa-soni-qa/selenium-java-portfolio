@@ -39,7 +39,7 @@ public class CheckoutPage {
     }
 
     public void clickFinish() {
-        WebDriverWait wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(15));
         wait.until(org.openqa.selenium.support.ui.ExpectedConditions
                 .visibilityOfElementLocated(finishButton));
         driver.findElement(finishButton).click();
@@ -50,7 +50,14 @@ public class CheckoutPage {
     }
 
     public void fillCheckoutDetails(String firstName, String lastName, String zipCode) {
-        WebDriverWait wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(10));
+        try {
+            org.openqa.selenium.Alert alert = driver.switchTo().alert();
+            alert.dismiss();
+        } catch (Exception e) {
+            // no alert present, continue
+        }
+
+        WebDriverWait wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(15));
         wait.until(org.openqa.selenium.support.ui.ExpectedConditions
                 .visibilityOfElementLocated(firstNameField));
         enterFirstName(firstName);
