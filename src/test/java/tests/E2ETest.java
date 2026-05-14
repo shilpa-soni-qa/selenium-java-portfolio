@@ -7,52 +7,49 @@ import pages.CheckoutPage;
 import pages.InventoryPage;
 import pages.LoginPage;
 import utils.BaseTest;
+import utils.ExtentReportManager;
 
 public class E2ETest extends BaseTest {
 
     @Test
     public void testCompleteUserJourney() {
-        // Step 1 - Navigate to site
-        driver.get("https://www.saucedemo.com");
-        System.out.println("Step 1: Navigated to SauceDemo ✅");
+        test = ExtentReportManager.createTest("Complete E2E User Journey Test");
 
-        // Step 2 - Login
+        test.info("Step 1: Navigating to SauceDemo");
+        driver.get("https://www.saucedemo.com");
+
+        test.info("Step 2: Logging in");
         LoginPage loginPage = new LoginPage(driver);
         loginPage.login("standard_user", "secret_sauce");
-        System.out.println("Step 2: Login successful ✅");
 
-        // Step 3 - Verify we're on inventory page
+        test.info("Step 3: Verifying products page");
         InventoryPage inventoryPage = new InventoryPage(driver);
         Assert.assertEquals(inventoryPage.getPageTitle(), "Products",
                 "Not on inventory page!");
-        System.out.println("Step 3: Products page verified ✅");
 
-        // Step 4 - Add item to cart
+        test.info("Step 4: Adding item to cart");
         inventoryPage.addFirstItemToCart();
         Assert.assertEquals(inventoryPage.getCartCount(), "1",
                 "Cart count should be 1!");
-        System.out.println("Step 4: Item added to cart ✅");
 
-        // Step 5 - Go to cart
+        test.info("Step 5: Verifying cart");
         CartPage cartPage = new CartPage(driver);
         cartPage.clickCart();
         Assert.assertEquals(cartPage.getCartItemCount(), 1,
                 "Cart should have 1 item!");
-        System.out.println("Step 5: Cart verified ✅");
 
-        // Step 6 - Checkout
+        test.info("Step 6: Filling checkout details");
         cartPage.clickCheckout();
         CheckoutPage checkoutPage = new CheckoutPage(driver);
         checkoutPage.fillCheckoutDetails("Shilpa", "Soni", "682001");
-        System.out.println("Step 6: Checkout details filled ✅");
 
-        // Step 7 - Finish order
+        test.info("Step 7: Confirming order");
         checkoutPage.clickFinish();
         String confirmation = checkoutPage.getConfirmationMessage();
         Assert.assertEquals(confirmation, "Thank you for your order!",
                 "Order confirmation failed!");
-        System.out.println("Step 7: Order confirmed ✅");
 
+        test.info("🎉 Full E2E Test Passed!");
         System.out.println("\n🎉 Full E2E Test Passed!");
     }
 }
